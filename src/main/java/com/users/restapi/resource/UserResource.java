@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,11 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.http.HttpHeaders;
-//import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.servlet.function.ServerRequest.Headers;
+
 
 import com.users.restapi.models.User;
 import com.users.restapi.repository.UserRepository;
@@ -29,28 +28,31 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value="/api")
 @Api(value="API REST Users")
-@CrossOrigin(origins="*") ///http://dominio.com
+@CrossOrigin(origins="*") //[http://dominio.com]
 public class UserResource {
 	
 	@Autowired
 	UserRepository userRespository;
 	
+	//@Value("${application.name}")
+	//private String appName;
+	
+	
 	@ApiOperation(value="Retorna lista de usuarios")
 	@GetMapping(value = "/users" )
-	public List<User> listUsers(){
-		return userRespository.findAll();
+	public ResponseEntity<List<User>>  listUsers(){
+		//System.out.println(appName);
+		return new ResponseEntity<List<User>>( userRespository.findAll(), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="Retorna um  usuario")
 	@GetMapping("/user/{id}")
 	public ResponseEntity<Optional<User>>  listSpecificUser(@PathVariable(value="id") long id){
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("response", "UserResource");
 		
 		Optional<User>  user = Optional.ofNullable(userRespository.findById(id));
 		if(user.isPresent()) {
 			
-			return ResponseEntity.ok().headers(headers).body(user);
+			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
@@ -58,31 +60,25 @@ public class UserResource {
 	
 	@ApiOperation(value="Cria um usuário novo")
 	@PostMapping("/user")
-	public ResponseEntity<User> saveUser(@RequestBody User user) {
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<User>  saveUser(@RequestBody User user) {
+		//String senha = new BCryptPasswordEncoder().encode(user.getPassword());
+		return new ResponseEntity<User>( userRespository.save(user), HttpStatus.CREATED);
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("response", "UserResource");
-		userRespository.save(user);
-		return ResponseEntity.status(201).headers(headers).body(user);
 	}
 	
 	@ApiOperation(value="Atualiza um usuário")
 	@PutMapping("/user/{id}")
-	//@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<User>  editUser(@PathVariable(value="id") long id, @RequestBody User newUser) {
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("response", "UserResource");
-		
+	public ResponseEntity<Optional<User>>  editUser(@PathVariable(value="id") long id, @RequestBody User newUser) {
+				
 		Optional<User>  oldUser = Optional.ofNullable(userRespository.findById(id));
 		if(oldUser.isPresent()) {
 			User user = oldUser.get(); 
 			user.setName(newUser.getName());
 			userRespository.save(user);
-			//return new ResponseEntity<>(HttpStatus.OK);
-			return ResponseEntity.accepted().headers(headers).body(user);
+			return new ResponseEntity<Optional<User>>(HttpStatus.ACCEPTED);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 	}
 	@ApiOperation(value="Deleta um usuario")
