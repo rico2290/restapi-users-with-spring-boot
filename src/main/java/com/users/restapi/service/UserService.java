@@ -3,9 +3,7 @@ package com.users.restapi.service;
 import com.users.restapi.models.User;
 import com.users.restapi.repository.UserRepository;
 
-//import java.util.Optional;
 
-//import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

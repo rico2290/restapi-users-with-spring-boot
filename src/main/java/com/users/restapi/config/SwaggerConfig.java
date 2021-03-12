@@ -21,7 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //Heroku: https://restapi-users-swagger.herokuapp.com/swagger-ui.html#/
 public class SwaggerConfig {
 	
-
 	@Bean
     public Docket UsertApi() {
         return new Docket(DocumentationType.SWAGGER_2)
