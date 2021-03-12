@@ -3,6 +3,8 @@ package com.users.restapi.resource;
 //import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.users.restapi.models.User;
-import com.users.restapi.repository.UserRepository;
+//import com.users.restapi.repository.UserRepository;
 import com.users.restapi.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -35,8 +37,8 @@ import io.swagger.annotations.ApiOperation;
 @Validated
 public class UserResource {
 
-	@Autowired
-	UserRepository userRespository;
+	//@Autowired
+	//UserRepository userRespository;
 	
 	@Autowired
 	UserService userService;
@@ -56,7 +58,7 @@ public class UserResource {
 	@GetMapping("/user/{id}")
 	public ResponseEntity<Optional<User>> listSpecificUser(@PathVariable(value = "id") long id) {
 
-		Optional<User> user = Optional.ofNullable(userRespository.findById(id));
+		Optional<User> user = Optional.ofNullable(this.userService.findUser(id));
 		if (user.isPresent()) {
 
 			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
@@ -68,22 +70,24 @@ public class UserResource {
 	@ApiOperation(value = "Cria um usuário novo")
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<User> saveUser(@Validated @RequestBody User user) {
+	public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
 		// String senha = new BCryptPasswordEncoder().encode(user.getPassword());
-		return new ResponseEntity<User>(userRespository.save(user), HttpStatus.CREATED);
+		return new ResponseEntity<User>(this.userService.saveUser(user), HttpStatus.CREATED);
 
 	}
 
 	@ApiOperation(value = "Atualiza um usuário")
 	@PutMapping("/user/{id}")
-	public ResponseEntity<Optional<User>> editUser(@PathVariable(value = "id") long id, @RequestBody User newUser) {
-
-		Optional<User> oldUser = Optional.ofNullable(userRespository.findById(id));
+	public ResponseEntity<User> editUser(@PathVariable(value = "id") long id, @Valid @RequestBody User newUser) {
+		Optional<User> oldUser = Optional.ofNullable(this.userService.findUser(id));
+	
 		if (oldUser.isPresent()) {
 			User user = oldUser.get();
 			user.setName(newUser.getName());
-			userRespository.save(user);
-			return new ResponseEntity<Optional<User>>(HttpStatus.ACCEPTED);
+			user.setPassword(newUser.getPassword());
+			User userUpdated = this.userService.saveUser(user);
+			
+			return new ResponseEntity<User>(userUpdated, HttpStatus.ACCEPTED);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -92,9 +96,9 @@ public class UserResource {
 	@ApiOperation(value = "Deleta um usuario")
 	@DeleteMapping("/user/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") long id) {
-		Optional<User> deleteUser = Optional.ofNullable(userRespository.findById(id));
+		Optional<User> deleteUser = Optional.ofNullable((this.userService.findUser(id)));
 		if (deleteUser.isPresent()) {
-			userRespository.deleteById(id);
+			this.userService.removeUser(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

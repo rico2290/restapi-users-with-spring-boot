@@ -3,6 +3,10 @@ package com.users.restapi.service;
 import com.users.restapi.models.User;
 import com.users.restapi.repository.UserRepository;
 
+//import java.util.Optional;
+
+//import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,4 +26,15 @@ public class UserService {
         return this.userRepository.findAll(pageable);
     }
 
+    public User findUser(long id){
+    	return (this.userRepository.findById(id));
+    }
+    
+    public User saveUser(User user){
+    	return this.userRepository.save(user);
+    }
+    
+    public void removeUser(long id) {
+    	 this.userRepository.deleteById(id);
+    }
 }
