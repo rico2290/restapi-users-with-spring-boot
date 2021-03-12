@@ -18,8 +18,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-//import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="TB_USER", schema = "public")
@@ -32,10 +34,16 @@ public class User implements Serializable{
 	//@Column( name = "id")
 	private long id;
 	
-	@Column(nullable = false, name = "name")
+	@NotNull
+	@NotBlank
+	@NotEmpty
+	@Column( name = "name")
 	private String name;
 	
-	@Column(nullable = false, name= "password")
+	@NotNull
+	@NotBlank
+	@NotEmpty
+	@Column( name= "password")
 	private String password;
 	
 	@OneToMany(mappedBy="user")

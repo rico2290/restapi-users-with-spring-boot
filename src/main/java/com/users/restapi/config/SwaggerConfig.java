@@ -17,7 +17,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-// [http://localhost:8080/swagger-ui.html#/]
+//Local: [http://localhost:port/[api-users]/swagger-ui.html#/]
+//Heroku: https://restapi-users-swagger.herokuapp.com/swagger-ui.html#/
 public class SwaggerConfig {
 	
 
