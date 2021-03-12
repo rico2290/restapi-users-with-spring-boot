@@ -1,4 +1,4 @@
-package com.users.restapi.resource;
+package com.users.restapi.controller;
 
 //import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "API REST Users")
 @CrossOrigin(origins = {"*"}) // [http://dominio.com]
 @Validated
-public class UserResource {
+public class UserController {
 
 	//@Autowired
 	//UserRepository userRespository;
