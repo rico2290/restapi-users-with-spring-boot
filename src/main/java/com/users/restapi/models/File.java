@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="file")
+@Table(name="TB_FILE")
 public class File implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,8 +22,8 @@ public class File implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(nullable = false, name = "name")
-	private String name;
+	@Column(nullable = false, name = "url")
+	private String url;
 	
 	
 
@@ -42,12 +42,13 @@ public class File implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+
+	public String getUrl() {
+		return url;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public Date getDataCriacao() {

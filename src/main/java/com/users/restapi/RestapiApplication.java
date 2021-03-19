@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import com.users.restapi.models.User;
 import com.users.restapi.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,11 +17,13 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class RestapiApplication {
+	
+	@Value("${application.name}")
+	private String applicationName;
 
 	public static void main(String[] args) {
 
 		SpringApplication.run(RestapiApplication.class, args);
-
 	}
 
 	@Bean
@@ -37,6 +40,8 @@ public class RestapiApplication {
 					user.setPassword("pwd"+ random.nextInt(1000) );
 					userRepository.save(user);
 				});
+				System.out.println(applicationName);
+				
 				
 			}
 			

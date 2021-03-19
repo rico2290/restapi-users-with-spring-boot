@@ -33,18 +33,15 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api")
 @Api(value = "API REST Users")
-@CrossOrigin(origins = {"*"}) // [http://dominio.com]
+@CrossOrigin(origins = {"*"})  // [http://dominio.com]
 @Validated
 public class UserController {
-
-	//@Autowired
-	//UserRepository userRespository;
+	
+	// @Value("${application.name}")
+	// private String appName;
 	
 	@Autowired
 	UserService userService;
-
-	// @Value("${application.name}")
-	// private String appName;
 
 	@ApiOperation(value = "Retorna lista de usuarios")
 	@GetMapping(value = "/users")
@@ -63,7 +60,7 @@ public class UserController {
 
 			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
 
 	}
 
@@ -89,19 +86,19 @@ public class UserController {
 			
 			return new ResponseEntity<User>(userUpdated, HttpStatus.ACCEPTED);
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 
 	}
 
 	@ApiOperation(value = "Deleta um usuario")
 	@DeleteMapping("/user/{id}")
-	public ResponseEntity<User> deleteUser(@PathVariable(value = "id") long id) {
+	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long id) {
 		Optional<User> deleteUser = Optional.ofNullable((this.userService.findUser(id)));
 		if (deleteUser.isPresent()) {
 			this.userService.removeUser(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
 
 	}
 
