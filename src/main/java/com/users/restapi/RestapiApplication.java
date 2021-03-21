@@ -37,6 +37,7 @@ public class RestapiApplication {
 				IntStream.rangeClosed(1, random.nextInt(200)).forEach(i ->{
 					User user = new User();
 					user.setName("user"+ i);
+					user.setEmail("user"+ i + "@example.com");
 					user.setPassword("pwd"+ random.nextInt(1000) );
 					userRepository.save(user);
 				});

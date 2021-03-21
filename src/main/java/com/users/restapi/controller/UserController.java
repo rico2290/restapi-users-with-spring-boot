@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.users.restapi.domain.service.CrudUserService;
 import com.users.restapi.models.User;
-//import com.users.restapi.repository.UserRepository;
 import com.users.restapi.service.UserService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -37,25 +35,25 @@ import io.swagger.annotations.ApiOperation;
 @Validated
 public class UserController {
 	
-	// @Value("${application.name}")
-	// private String appName;
+	@Autowired
+	CrudUserService crudUserService;
 	
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@ApiOperation(value = "Retorna lista de usuarios")
 	@GetMapping(value = "/users")
-	public ResponseEntity<Page<User>> listUsers(@RequestParam(required = false, defaultValue = "0") int pageNumber,
+	public ResponseEntity<Page<User>> getUsers(@RequestParam(required = false, defaultValue = "0") int pageNumber,
 			@RequestParam int pageSize, @RequestParam(defaultValue = "name") String sortBy) {
 
 		return new ResponseEntity<Page<User>>(this.userService.getUsers(pageNumber, pageSize, sortBy), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retorna um  usuario")
-	@GetMapping("/user/{id}")
-	public ResponseEntity<Optional<User>> listSpecificUser(@PathVariable(value = "id") long id) {
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<Optional<User>> getUser(@PathVariable(value = "userId") long userId) {
 
-		Optional<User> user = Optional.ofNullable(this.userService.findUser(id));
+		Optional<User> user = Optional.ofNullable(crudUserService.findById(userId));
 		if (user.isPresent()) {
 
 			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
@@ -69,20 +67,21 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
 		// String senha = new BCryptPasswordEncoder().encode(user.getPassword());
-		return new ResponseEntity<User>(this.userService.saveUser(user), HttpStatus.CREATED);
+		return new ResponseEntity<User>(crudUserService.save(user), HttpStatus.CREATED);
 
 	}
 
 	@ApiOperation(value = "Atualiza um usuário")
-	@PutMapping("/user/{id}")
-	public ResponseEntity<User> editUser(@PathVariable(value = "id") long id, @Valid @RequestBody User newUser) {
-		Optional<User> oldUser = Optional.ofNullable(this.userService.findUser(id));
+	@PutMapping("/user/{userId}")
+	public ResponseEntity<User> editUser(@PathVariable(value = "userId") long userId, @Valid @RequestBody User newUser) {
+		Optional<User> oldUser = Optional.ofNullable(userService.findById(userId));
 	
 		if (oldUser.isPresent()) {
 			User user = oldUser.get();
 			user.setName(newUser.getName());
+			user.setEmail(newUser.getEmail());
 			user.setPassword(newUser.getPassword());
-			User userUpdated = this.userService.saveUser(user);
+			User userUpdated = userService.save(user);
 			
 			return new ResponseEntity<User>(userUpdated, HttpStatus.ACCEPTED);
 		}
@@ -92,10 +91,10 @@ public class UserController {
 
 	@ApiOperation(value = "Deleta um usuario")
 	@DeleteMapping("/user/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long id) {
-		Optional<User> deleteUser = Optional.ofNullable((this.userService.findUser(id)));
+	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId) {
+		Optional<User> deleteUser = Optional.ofNullable((crudUserService.findById(userId)));
 		if (deleteUser.isPresent()) {
-			this.userService.removeUser(id);
+			this.userService.removeUser(userId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);

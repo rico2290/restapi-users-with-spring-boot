@@ -18,8 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
@@ -31,30 +31,34 @@ public class User implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@Column( name = "id")
-	private long id;
+	@Column( name = "userId")
+	private long userId;
 	
 	@NotNull
 	@NotBlank
-	@NotEmpty
 	@Column( name = "name")
 	private String name;
 	
 	@NotNull
 	@NotBlank
-	@NotEmpty
+	@Email
+	@Column( name= "email")
+	private String email;
+	
+	@NotNull
+	@NotBlank
 	@Column( name= "password")
 	private String password;
 	
 	@OneToMany(mappedBy="user")
 	private List<File> files;
 
-	public long getId() {
-		return id;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setUserId(long id) {
+		this.userId = id;
 	}
 
 	public String getName() {
@@ -63,6 +67,15 @@ public class User implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {

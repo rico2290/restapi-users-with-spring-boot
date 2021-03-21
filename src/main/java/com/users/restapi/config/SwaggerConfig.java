@@ -32,14 +32,14 @@ public class SwaggerConfig {
     }
 
     private ApiInfo metaInfo() {
-
         @SuppressWarnings("rawtypes")
 		ApiInfo apiInfo = new ApiInfo(
                 "Users API REST",
                 "API REST de cadastro de usuarios.",
                 "1.0",
                 "Terms of Service",
-                new Contact("Rico Lima", "https://github.com/rico2290/restapi-usuarios",
+                new Contact(
+                		"Rico Lima", "https://github.com/rico2290/restapi-usuarios",
                         "rjl220990@gmail.com"),
                 "Apache License Version 2.0",
                 "https://www.apache.org/licesen.html", new ArrayList<VendorExtension>()

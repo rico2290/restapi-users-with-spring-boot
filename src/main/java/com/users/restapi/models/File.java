@@ -1,7 +1,8 @@
 package com.users.restapi.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+//import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="TB_FILE")
@@ -22,13 +24,14 @@ public class File implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@NotBlank
 	@Column(nullable = false, name = "url")
 	private String url;
 	
 	
-
+	@NotBlank
 	@Column(nullable = false, name = "createdAt")
-	private Date createdAt;
+	private LocalDate createdAt;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
@@ -51,11 +54,11 @@ public class File implements Serializable {
 		this.url = url;
 	}
 
-	public Date getDataCriacao() {
+	public LocalDate getDataCriacao() {
 		return createdAt;
 	}
 
-	public void setDataCriacao(Date createdAt) {
+	public void setDataCriacao(LocalDate createdAt) {
 		this.createdAt = createdAt;
 	}
 	
@@ -81,8 +84,7 @@ public class File implements Serializable {
 		return true;
 	}
 	
-	
-	
+
 	
 
 }

@@ -24,11 +24,11 @@ public class UserService {
         return this.userRepository.findAll(pageable);
     }
 
-    public User findUser(long id){
+    public User findById(long id){
     	return (this.userRepository.findById(id));
     }
     
-    public User saveUser(User user){
+    public User save(User user){
     	return this.userRepository.save(user);
     }
     
