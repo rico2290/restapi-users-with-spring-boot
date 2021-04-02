@@ -13,11 +13,14 @@
 	
 
 
-DROP TABLE IF EXISTS TB_FILE;
+--DROP TABLE IF EXISTS TB_FILE;
 
-CREATE TABLE TB_FILE (
-	id INTEGER  PRIMARY KEY AUTO_INCREMENT,
-	url VARCHAR(255) NOT NULL,
-	createdAt TIMESTAMP
-);
+--CREATE TABLE TB_FILE (
+	--id bigint  primary key auto_increment,
+	--user_id bigint not null,
+	--url varchar(max) not null,
+	--createdAt timestamp not null
+--);
+
 	
+--ALTER TABLE TB_FILE ADD CONSTRAINT fk_file_user FOREIGN KEY (user_id) REFERENCES tb_user(id);

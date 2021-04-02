@@ -1,8 +1,7 @@
 package com.users.restapi.models;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-//import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,9 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+//import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 @Table(name="TB_FILE")
-public class File implements Serializable {
+public class FileUpload implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -25,17 +26,23 @@ public class File implements Serializable {
 	private long id;
 	
 	@NotBlank
+	@Column(nullable = false, name = "name")
+	private String name;
+	
+	@NotBlank
 	@Column(nullable = false, name = "url")
 	private String url;
 	
 	
 	@NotBlank
 	@Column(nullable = false, name = "createdAt")
-	private LocalDate createdAt;
+	private LocalDateTime createdAt;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
+	//@JoinColumn(name="user_id")
 	private User user;
+	
+	//private MultipartFile file 
 
 	public long getId() {
 		return id;
@@ -44,7 +51,16 @@ public class File implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getUrl() {
 		return url;
@@ -54,14 +70,25 @@ public class File implements Serializable {
 		this.url = url;
 	}
 
-	public LocalDate getDataCriacao() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setDataCriacao(LocalDate createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 	
+	
+	
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,7 +105,7 @@ public class File implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		File other = (File) obj;
+		FileUpload other = (FileUpload) obj;
 		if (id != other.id)
 			return false;
 		return true;

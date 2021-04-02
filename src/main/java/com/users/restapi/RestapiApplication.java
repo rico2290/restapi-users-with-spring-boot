@@ -1,3 +1,4 @@
+
 package com.users.restapi;
 
 import java.util.Random;
@@ -34,11 +35,11 @@ public class RestapiApplication {
 			public void run(String... args) throws Exception {
 				// TODO Auto-generated method stub
 				Random random = new Random();
-				IntStream.rangeClosed(1, random.nextInt(200)).forEach(i ->{
+				IntStream.rangeClosed(1, random.nextInt(100)).forEach(i ->{
 					User user = new User();
 					user.setName("user"+ i);
 					user.setEmail("user"+ i + "@example.com");
-					user.setPassword("pwd"+ random.nextInt(1000) );
+					user.setPassword("pwd"+ random.nextInt(100) );
 					userRepository.save(user);
 				});
 				System.out.println(applicationName);

@@ -41,7 +41,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@ApiOperation(value = "Retorna lista de usuarios")
+	@ApiOperation(value = "Retorna lista de usuários")
 	@GetMapping(value = "/users")
 	public ResponseEntity<Page<User>> getUsers(@RequestParam(required = false, defaultValue = "0") int pageNumber,
 			@RequestParam int pageSize, @RequestParam(defaultValue = "name") String sortBy) {
@@ -49,7 +49,7 @@ public class UserController {
 		return new ResponseEntity<Page<User>>(this.userService.getUsers(pageNumber, pageSize, sortBy), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Retorna um  usuario")
+	@ApiOperation(value = "Retorna um  usuário")
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<Optional<User>> getUser(@PathVariable(value = "userId") long userId) {
 
@@ -58,7 +58,7 @@ public class UserController {
 
 			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
 		}
-		return new ResponseEntity<Optional<User>>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
 
@@ -89,9 +89,9 @@ public class UserController {
 
 	}
 
-	@ApiOperation(value = "Deleta um usuario")
-	@DeleteMapping("/user/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable(value = "id") long userId) {
+	@ApiOperation(value = "Deleta um usuário")
+	@DeleteMapping("/user/{userId}")
+	public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") long userId) {
 		Optional<User> deleteUser = Optional.ofNullable((crudUserService.findById(userId)));
 		if (deleteUser.isPresent()) {
 			this.userService.removeUser(userId);

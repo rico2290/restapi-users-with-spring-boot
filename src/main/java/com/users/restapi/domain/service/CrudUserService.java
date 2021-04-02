@@ -19,7 +19,7 @@ public class CrudUserService {
 		User euserExists = userRepository.findByEmail(user.getEmail());
 		
 		if(euserExists != null && !euserExists.equals(user)) {
-			throw new HandleBusinessException("User already exists with this email");
+			throw new HandleBusinessException("Já existe usuário com este email");
 		}
 		return userRepository.save(user);
 	}

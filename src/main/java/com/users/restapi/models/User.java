@@ -24,15 +24,15 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
-@Table(name="TB_USER", schema = "public")
+@Table(name="TB_USER")
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column( name = "userId")
-	private long userId;
+	//@Column( name = "id")
+	private long id;
 	
 	@NotNull
 	@NotBlank
@@ -51,14 +51,14 @@ public class User implements Serializable{
 	private String password;
 	
 	@OneToMany(mappedBy="user")
-	private List<File> files;
+	private List<FileUpload> files;
 
-	public long getUserId() {
-		return userId;
+	public long getId() {
+		return id;
 	}
 
-	public void setUserId(long id) {
-		this.userId = id;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {
