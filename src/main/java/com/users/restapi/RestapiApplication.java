@@ -1,6 +1,8 @@
 
 package com.users.restapi;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -26,7 +28,7 @@ public class RestapiApplication {
 
 		SpringApplication.run(RestapiApplication.class, args);
 	}
-
+	
 	@Bean
 	CommandLineRunner run(UserRepository userRepository){
 		return new CommandLineRunner(){
@@ -39,10 +41,15 @@ public class RestapiApplication {
 					User user = new User();
 					user.setName("user"+ i);
 					user.setEmail("user"+ i + "@example.com");
-					user.setPassword("pwd"+ random.nextInt(100) );
+					user.setPassword("pwd@api"+ random.nextInt(100) );
+					user.setEndereco("endereço"+ random.nextInt(100) );
+					user.setCidade("cidade"+ random.nextInt(100) );
+					user.setCreatedAt(LocalDateTime.now());
 					userRepository.save(user);
 				});
+				
 				System.out.println(applicationName);
+				System.out.println("ACESSE O LINK A SEGUIR PRA TESTAR: http://localhost:8081/api-users/swagger-ui.html#/");
 				
 				
 			}

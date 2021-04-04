@@ -1,5 +1,7 @@
 package com.users.restapi.domain.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class CrudUserService {
 		if(euserExists != null && !euserExists.equals(user)) {
 			throw new HandleBusinessException("Já existe usuário com este email");
 		}
+		user.setCreatedAt(LocalDateTime.now());
 		return userRepository.save(user);
 	}
 	

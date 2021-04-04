@@ -1,7 +1,9 @@
 package com.users.restapi.controller;
 
+import java.util.List;
 //import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -31,7 +33,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api")
 @Api(value = "API REST Users")
-@CrossOrigin(origins = {"*"})  // [http://dominio.com]
+@CrossOrigin(origins = {"*"})  
 @Validated
 public class UserController {
 	
@@ -41,15 +43,28 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@ApiOperation(value = "Retorna lista de usuários")
+	@ApiOperation(value = "Listar usuários")
 	@GetMapping(value = "/users")
 	public ResponseEntity<Page<User>> getUsers(@RequestParam(required = false, defaultValue = "0") int pageNumber,
 			@RequestParam int pageSize, @RequestParam(defaultValue = "name") String sortBy) {
-
+		
 		return new ResponseEntity<Page<User>>(this.userService.getUsers(pageNumber, pageSize, sortBy), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Listar usuários com Stream")
+	@GetMapping(value = "/usersWithStream")
+	
+	public ResponseEntity<List<User>> getUsersWithStream() {
+	
+		 List<User> allUsers = crudUserService.getUsers();
+		 allUsers.stream().forEach(user -> user.setName(user.getName().toUpperCase()));
+		 return new ResponseEntity<List<User>>(allUsers,HttpStatus.OK);
 
-	@ApiOperation(value = "Retorna um  usuário")
+		
+	}
+	
+
+	@ApiOperation(value = "Retornar um  usuário")
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<Optional<User>> getUser(@PathVariable(value = "userId") long userId) {
 
@@ -62,7 +77,7 @@ public class UserController {
 
 	}
 
-	@ApiOperation(value = "Cria um usuário novo")
+	@ApiOperation(value = "Criar um usuário")
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
@@ -71,33 +86,38 @@ public class UserController {
 
 	}
 
-	@ApiOperation(value = "Atualiza um usuário")
+	@ApiOperation(value = "Atualizar um usuário")
 	@PutMapping("/user/{userId}")
 	public ResponseEntity<User> editUser(@PathVariable(value = "userId") long userId, @Valid @RequestBody User newUser) {
 		Optional<User> oldUser = Optional.ofNullable(userService.findById(userId));
 	
 		if (oldUser.isPresent()) {
+			/*
 			User user = oldUser.get();
 			user.setName(newUser.getName());
 			user.setEmail(newUser.getEmail());
-			user.setPassword(newUser.getPassword());
-			User userUpdated = userService.save(user);
-			
-			return new ResponseEntity<User>(userUpdated, HttpStatus.ACCEPTED);
+			if(newUser.getPassword().length() < 1 || newUser.getPassword()== null) {
+				user.setPassword(newUser.getPassword());				
+			}
+			*/
+			newUser.setId(userId);
+			newUser.setCreatedAt(oldUser.get().getCreatedAt());
+
+			return new ResponseEntity<User>(userService.save(newUser), HttpStatus.ACCEPTED);
 		}
 		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 
-	}
+	}	
 
-	@ApiOperation(value = "Deleta um usuário")
+	@ApiOperation(value = "Deletar um usuário")
 	@DeleteMapping("/user/{userId}")
 	public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") long userId) {
 		Optional<User> deleteUser = Optional.ofNullable((crudUserService.findById(userId)));
 		if (deleteUser.isPresent()) {
 			this.userService.removeUser(userId);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("Usuario removido com sucesso!",HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("Não existe usuário com esse ID", HttpStatus.NOT_FOUND);
 
 	}
 

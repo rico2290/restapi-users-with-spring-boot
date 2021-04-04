@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-//Local: [http://localhost:port/[api-users]/swagger-ui.html#/]
+//Local: http://localhost:8081/api-users/swagger-ui.html#/
 //Heroku: https://restapi-users-swagger.herokuapp.com/swagger-ui.html#/
 public class SwaggerConfig {
 	
@@ -35,7 +35,7 @@ public class SwaggerConfig {
         @SuppressWarnings("rawtypes")
 		ApiInfo apiInfo = new ApiInfo(
                 "Users API REST",
-                "API REST de cadastro de usuarios.",
+                "API REST Cadastro de Usuario.",
                 "1.0",
                 "Terms of Service",
                 new Contact(
