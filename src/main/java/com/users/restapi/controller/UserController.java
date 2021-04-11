@@ -3,7 +3,7 @@ package com.users.restapi.controller;
 import java.util.List;
 //import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+//import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -43,10 +43,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@ApiOperation(value = "Listar usuários")
+	//@ApiOperation(value = "Listar usuários com paginação")
 	@GetMapping(value = "/users")
 	public ResponseEntity<Page<User>> getUsers(@RequestParam(required = false, defaultValue = "0") int pageNumber,
-			@RequestParam int pageSize, @RequestParam(defaultValue = "name") String sortBy) {
+			@RequestParam int pageSize, @RequestParam(defaultValue = "nome") String sortBy) {
 		
 		return new ResponseEntity<Page<User>>(this.userService.getUsers(pageNumber, pageSize, sortBy), HttpStatus.OK);
 	}
@@ -57,12 +57,25 @@ public class UserController {
 	public ResponseEntity<List<User>> getUsersWithStream() {
 	
 		 List<User> allUsers = crudUserService.getUsers();
-		 allUsers.stream().forEach(user -> user.setName(user.getName().toUpperCase()));
+		 allUsers.stream().forEach(user -> user.setNome(user.getNome().toUpperCase()));
 		 return new ResponseEntity<List<User>>(allUsers,HttpStatus.OK);
 
 		
 	}
 	
+	@ApiOperation(value= "Detalhar [native sql]")
+	@GetMapping(value= "/details/user/{userId}")
+	public ResponseEntity<Optional<User>> getUserDetails(@PathVariable(value = "userId") long userId) {
+
+		Optional<User> user = Optional.ofNullable(userService.findByIdDetail(userId));
+		if (user.isPresent()) {
+
+			return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+	}
+
 
 	@ApiOperation(value = "Retornar um  usuário")
 	@GetMapping("/user/{userId}")
@@ -96,9 +109,6 @@ public class UserController {
 			User user = oldUser.get();
 			user.setName(newUser.getName());
 			user.setEmail(newUser.getEmail());
-			if(newUser.getPassword().length() < 1 || newUser.getPassword()== null) {
-				user.setPassword(newUser.getPassword());				
-			}
 			*/
 			newUser.setId(userId);
 			newUser.setCreatedAt(oldUser.get().getCreatedAt());

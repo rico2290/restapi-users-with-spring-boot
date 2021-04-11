@@ -9,9 +9,9 @@ package com.users.restapi.models;
  */
 
 import java.io.Serializable;
-import java.time.LocalDate;
-//import java.util.List;
+
 import java.time.LocalDateTime;
+//import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,15 +21,22 @@ import javax.persistence.Id;
 //import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 
 @Entity
+@Data
 @Table(name="TB_USER")
 public class User implements Serializable{
 	
@@ -37,44 +44,45 @@ public class User implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	//@Column( name = "id")
+
 	private long id;
 	
-	@NotNull
 	@NotBlank
-	@Column( name = "name")
-	private String name;
+	@Column( name = "nome", length= 100)
+	private String nome;
 	
-	@NotNull
 	@NotBlank
 	@Email
-	@Column( name= "email")
+	@Column( name= "email", length= 50)
 	private String email;
 	
+	
+	@NotBlank
+	@Column( name = "endereco")
+	private String endereco;
+	
+	@NotBlank
+	@Column( name = "cidade", length= 15)
+	private String cidade;
+	
+	@Column(name= "createdAt")
+	private LocalDateTime createdAt;
+	
+	/*
 	@NotNull
 	@NotBlank
 	//@Min(5)
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column( name= "password")
 	private String password;
+	 */
 	
-	@NotNull
-	@NotBlank
-	@Column( name = "endereco")
-	private String endereco;
-	
-	@NotNull
-	@NotBlank
-	@Column( name = "cidade")
-	private String cidade;
-	
-	@Column(name= "createdAt")
-	private LocalDateTime createdAt;
-	
-	
-	/*@OneToMany(mappedBy="user")
+	/*
+	 * @OneToMany(mappedBy="user")
 	private List<FileUpload> files;
 	*/
+	
+	/*
 	public long getId() {
 		return id;
 	}
@@ -103,7 +111,7 @@ public class User implements Serializable{
 	public String getPassword() {
 		return password;
 	}
-
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -132,7 +140,7 @@ public class User implements Serializable{
 		this.createdAt = localDateTime;
 	}
 	
-	/*
+
 	public List<FileUpload> getFiles() {
 		return files;
 	}
@@ -142,9 +150,12 @@ public class User implements Serializable{
 		this.files = files;
 	}
 	*/
+	/*
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
+	*/
+
 
 }
 

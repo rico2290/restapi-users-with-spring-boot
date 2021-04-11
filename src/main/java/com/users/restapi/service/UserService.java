@@ -5,6 +5,8 @@ import com.users.restapi.repository.UserRepository;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class UserService {
+
+	@Autowired
+	private EntityManager entity;
 
     @Autowired
     UserRepository userRepository;
@@ -28,6 +33,12 @@ public class UserService {
     	return (this.userRepository.findById(id));
     }
     
+    public User findByIdDetail(long id){
+    	return userRepository.findByIUser(id);
+    }
+ 
+    
+    
     public User save(User user){
     	return this.userRepository.save(user);
     }
@@ -35,9 +46,5 @@ public class UserService {
     public void removeUser(long id) {
     	 this.userRepository.deleteById(id);
     }
-    /*
-    public List<User> getUsersWithStream (){
-    	return this.userRepository.findAll();
-    }
-    */
+
 }

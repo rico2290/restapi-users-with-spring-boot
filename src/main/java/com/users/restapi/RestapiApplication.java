@@ -1,7 +1,7 @@
 
 package com.users.restapi;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -21,8 +21,14 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class RestapiApplication {
 	
-	@Value("${application.name}")
+	@Value("${spring.application.name}")
 	private String applicationName;
+	
+	@Value("${server.port}")
+	private String port;
+	
+	@Value("${server.servlet.context-path}")
+	private String context_path;
 
 	public static void main(String[] args) {
 
@@ -39,9 +45,8 @@ public class RestapiApplication {
 				Random random = new Random();
 				IntStream.rangeClosed(1, random.nextInt(100)).forEach(i ->{
 					User user = new User();
-					user.setName("user"+ i);
+					user.setNome("user"+ i);
 					user.setEmail("user"+ i + "@example.com");
-					user.setPassword("pwd@api"+ random.nextInt(100) );
 					user.setEndereco("endereço"+ random.nextInt(100) );
 					user.setCidade("cidade"+ random.nextInt(100) );
 					user.setCreatedAt(LocalDateTime.now());
@@ -49,7 +54,7 @@ public class RestapiApplication {
 				});
 				
 				System.out.println(applicationName);
-				System.out.println("ACESSE O LINK A SEGUIR PRA TESTAR: http://localhost:8081/api-users/swagger-ui.html#/");
+				System.out.println("ACESSE O LINK A SEGUIR PRA TESTAR: "+ "http://localhost:"+port+context_path+"/swagger-ui.html#/");
 				
 				
 			}
